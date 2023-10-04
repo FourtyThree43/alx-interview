@@ -76,10 +76,10 @@ def canUnlockAll_DFS(boxes: List[List[int]]) -> bool:
 
 def canUnlockAll(boxes: List[List[int]]) -> bool:
     """ Union find implementation """
-    if not boxes or len(boxes) == 0:
-        return False
-    if len(boxes) == 1:
-        return True
+    # if not boxes or len(boxes) == 0:
+    #     return False
+    # if len(boxes) == 1:
+    #     return True
 
     parent = list(range(len(boxes)))
 
