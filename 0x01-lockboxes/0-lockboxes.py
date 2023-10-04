@@ -74,7 +74,7 @@ def canUnlockAll_DFS(boxes: List[List[int]]) -> bool:
     return len(opened_boxes) == len(boxes)
 
 
-def canUnlockAll_UF(boxes: List[List[int]]) -> bool:
+def canUnlockAll(boxes: List[List[int]]) -> bool:
     """ Union find implementation """
     if not boxes or len(boxes) == 0:
         return False
@@ -97,24 +97,3 @@ def canUnlockAll_UF(boxes: List[List[int]]) -> bool:
                 union(i, key)
 
     return sum(i == find(i) for i in range(len(boxes))) == 1
-
-
-def canUnlockAll(boxes: List[List[int]]) -> bool:
-    """
-    Determine if all boxes can be opened.
-    """
-
-    if not boxes or len(boxes) == 0:
-        return False
-    if len(boxes) == 1:
-        return True
-
-    # Initialize the set of keys with the first key
-    keys_found = set([0])
-
-    for key in keys_found:
-        for box_key in boxes[key]:
-            if box_key not in keys_found and box_key < len(boxes):
-                keys_found.add(box_key)
-
-    return len(keys_found) == len(boxes)
