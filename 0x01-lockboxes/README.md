@@ -2,11 +2,9 @@
 
 ## 0x01. lockboxes
 
-## Lockboxes Problem
+## Description
 
-## Problem Description
-
-You have `n` number of locked boxes in front of you. Each box is numbered sequentially from `0` to `n - 1` and each box may contain keys to the other boxes. The task is to write a method that determines if all the boxes can be opened.
+You have `n` number of locked boxes in front of you. Each box is numbered sequentially from `0` to `n - 1`, and each box may contain keys to the other boxes. The task is to write a method that determines if all the boxes can be opened.
 
 ## Assumptions
 
@@ -14,6 +12,22 @@ You have `n` number of locked boxes in front of you. Each box is numbered sequen
 - All keys will be positive integers.
 - There can be keys that do not have boxes.
 - The first box `boxes[0]` is unlocked.
+
+### Method Signature
+
+```python
+def canUnlockAll(boxes: List[List[int]]) -> bool:
+    pass
+```
+
+### Input
+
+- `boxes`: A list of lists representing the locked boxes. Each inner list contains the keys found in a box. The index of the outer list represents the box number.
+
+### Output
+
+- Return `True` if all boxes can be unlocked, and `False` otherwise.
+
 
 ## Solution
 
