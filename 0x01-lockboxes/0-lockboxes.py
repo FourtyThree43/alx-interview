@@ -39,7 +39,7 @@ def canUnlockAll_BFS(boxes: List[List[int]]) -> bool:
     return len(opened_boxes) == len(boxes)
 
 
-def canUnlockAll(boxes: List[List[int]]) -> bool:
+def canUnlockAll_DFS(boxes: List[List[int]]) -> bool:
     """
     Determine if all boxes can be opened.
 
@@ -72,3 +72,28 @@ def canUnlockAll(boxes: List[List[int]]) -> bool:
             keys_found.update(boxes[new_key])
 
     return len(opened_boxes) == len(boxes)
+
+
+def canUnlockAll(boxes: List[List[int]]) -> bool:
+    """ Union find implementation """
+    if not boxes or len(boxes) == 0:
+        return False
+    if len(boxes) == 1:
+        return True
+
+    parent = list(range(len(boxes)))
+
+    def find(x):
+        if x != parent[x]:
+            parent[x] = find(parent[x])
+        return parent[x]
+
+    def union(x, y):
+        parent[find(x)] = find(y)
+
+    for i, keys in enumerate(boxes):
+        for key in keys:
+            if key < len(boxes):
+                union(i, key)
+
+    return sum(i == find(i) for i in range(len(boxes))) == 1
