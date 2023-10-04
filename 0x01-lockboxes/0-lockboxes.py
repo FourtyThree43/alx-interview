@@ -4,7 +4,7 @@ from typing import List
 from collections import deque
 
 
-def canUnlockAll(boxes: List[List[int]]) -> bool:
+def canUnlockAll_BFS(boxes: List[List[int]]) -> bool:
     """
     Determine if all boxes can be opened.
 
@@ -18,7 +18,7 @@ def canUnlockAll(boxes: List[List[int]]) -> bool:
     BFS Implementation (using Queue):
         - Time Complexity: O(n), where n is the total number of keys across all
           boxes.
-        - Space Complexity: O(n), where n is the total number of keys across all
+        - Space Complexity: O(n), where n is the total num of keys across all
           boxes.
         - Data Structure Used: Queue (represented by a deque in Python)
     """
@@ -39,7 +39,7 @@ def canUnlockAll(boxes: List[List[int]]) -> bool:
     return len(opened_boxes) == len(boxes)
 
 
-def canUnlockAll_DFS(boxes: List[List[int]]) -> bool:
+def canUnlockAll(boxes: List[List[int]]) -> bool:
     """
     Determine if all boxes can be opened.
 
@@ -53,7 +53,7 @@ def canUnlockAll_DFS(boxes: List[List[int]]) -> bool:
     DFS Implementation (using Stack):
         - Time Complexity: O(n), where n is the total number of keys across all
           boxes.
-        - Space Complexity: O(n), where n is the total number of keys across all
+        - Space Complexity: O(n), where n is the total num of keys across all
           boxes.
         - Data Structure Used: Stack (represented by a set in Python)
     """
