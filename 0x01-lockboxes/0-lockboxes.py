@@ -74,27 +74,26 @@ def canUnlockAll_DFS(boxes: List[List[int]]) -> bool:
     return len(opened_boxes) == len(boxes)
 
 
-def canUnlockAll(boxes):
-    if not isinstance(boxes, list):
-        raise ValueError("Input must be a list of lists.")
+def canUnlockAll(boxes: List[List[int]]) -> bool:
+    """ Union find implementation """
+    if not boxes or len(boxes) == 0:
+        return False
+    if len(boxes) == 1:
+        return True
 
-    num_boxes = len(boxes)
-    unlocked_boxes = set()
-    keys_seen = set()
+    parent = list(range(len(boxes)))
 
-    queue = deque([0])
+    def find(x):
+        if x != parent[x]:
+            parent[x] = find(parent[x])
+        return parent[x]
 
-    while queue:
-        box = queue.popleft()
-        unlocked_boxes.add(box)
+    def union(x, y):
+        parent[find(x)] = find(y)
 
-        for key in boxes[box]:
-            if not isinstance(key, int):
-                raise ValueError("Keys must be positive integers.")
+    for i, keys in enumerate(boxes):
+        for key in keys:
+            if key < len(boxes):
+                union(i, key)
 
-            keys_seen.add(key)
-
-            if key not in unlocked_boxes and 0 <= key < num_boxes:
-                queue.append(key)
-
-    return len(unlocked_boxes) == num_boxes
+    return sum(i == find(i) for i in range(len(boxes))) == 1
