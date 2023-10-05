@@ -76,23 +76,25 @@ def canUnlockAll_DFS(boxes: List[List[int]]) -> bool:
 
 def canUnlockAll(boxes):
     num_boxes = len(boxes)
-    unlocked_boxes = set([0])  # Start with the first box unlocked
-    keys_found = set(boxes[0])  # Keys found in the first box
+    unlocked_boxes = set()
+    keys_seen = set()
 
-    while True:
-        added_new_unlocked_box = False
-        for box_idx in range(num_boxes):
-            if box_idx in unlocked_boxes:
-                for key in boxes[box_idx]:
-                    if key not in unlocked_boxes:
-                        unlocked_boxes.add(key)
-                        added_new_unlocked_box = True
+    # Initialize with the first box (0)
+    queue = [0]
 
-        # Check if any of the newly unlocked boxes contain keys
-        # that were not in keys_found initially
-        keys_found.update(unlocked_boxes)
+    while queue:
+        box = queue.pop(0)
+        unlocked_boxes.add(box)
 
-        if not added_new_unlocked_box:
-            break
+        # Check keys in the current box
+        for key in boxes[box]:
+            keys_seen.add(key)
 
-    return len(keys_found) == num_boxes
+            # If the key opens a new box and that box is not unlocked yet
+            # add it to the queue
+            if key not in unlocked_boxes and key < num_boxes:
+                queue.append(key)
+
+    # If all boxes can be unlocked (i.e., the set of unlocked_boxes contains
+    # all boxes)
+    return len(unlocked_boxes) == num_boxes
