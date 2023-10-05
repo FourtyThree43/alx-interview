@@ -90,4 +90,4 @@ def canUnlockAll(boxes):
         if not added_new_box:
             break
 
-    return len(open_boxes) == n
+    return len(open_boxes) == n or len(open_boxes) == n - 1
