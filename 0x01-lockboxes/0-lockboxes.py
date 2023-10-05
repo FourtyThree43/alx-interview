@@ -2,33 +2,34 @@
 """
 Module for the canUnlockAll function.
 """
+from typing import List
+from collections import deque
 
 
-def canUnlockAll(boxes):
+def canUnlockAll(boxes: List[List[int]]) -> bool:
     """
     Determines if all the boxes can be opened.
 
     Args:
-        boxes (list of lists): A list of lists representing the boxes and their keys.
+        boxes (list of lists): A list of lists representing the boxes and keys.
 
     Returns:
         bool: True if all boxes can be opened, False otherwise.
     """
-
-    # Initialize a set to keep track of visited boxes and keys seen
-    visited = set()
+    num_boxes = len(boxes)
+    unlocked_boxes = set()
     keys_seen = set()
 
-    # Start with box 0, which is already unlocked
-    stack = [0]
-    visited.add(0)
+    queue = deque([0])
 
-    while stack:
-        current_box = stack.pop()
-        for key in boxes[current_box]:
-            if key not in visited:
-                stack.append(key)
-                visited.add(key)
+    while queue:
+        box = queue.popleft()
+        unlocked_boxes.add(box)
+
+        for key in boxes[box]:
             keys_seen.add(key)
 
-    return len(visited) == len(boxes) and len(keys_seen) == len(boxes)
+            if key not in unlocked_boxes and key < num_boxes:
+                queue.append(key)
+
+    return len(unlocked_boxes) == num_boxes
