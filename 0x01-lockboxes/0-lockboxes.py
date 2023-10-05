@@ -75,20 +75,17 @@ def canUnlockAll_DFS(boxes: List[List[int]]) -> bool:
 
 
 def canUnlockAll(boxes):
+    if not boxes:
+        return False
+
     num_boxes = len(boxes)
-    unlocked_boxes = set()
-    keys_seen = set()
+    visited = set()
+    keys = set(boxes[0])
 
-    queue = deque([0])
+    while keys:
+        key = keys.pop()
+        if key < num_boxes and key not in visited:
+            visited.add(key)
+            keys.update(boxes[key])
 
-    while queue:
-        box = queue.popleft()
-        unlocked_boxes.add(box)
-
-        for key in boxes[box]:
-            keys_seen.add(key)
-
-            if key not in unlocked_boxes and key < num_boxes:
-                queue.append(key)
-
-    return len(unlocked_boxes) == num_boxes
+    return len(visited) == num_boxes
