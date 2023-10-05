@@ -75,17 +75,26 @@ def canUnlockAll_DFS(boxes: List[List[int]]) -> bool:
 
 
 def canUnlockAll(boxes):
-    if not boxes:
-        return False
+    if not isinstance(boxes, list):
+        raise ValueError("Input must be a list of lists.")
 
     num_boxes = len(boxes)
-    visited = set()
-    keys = set(boxes[0])
+    unlocked_boxes = set()
+    keys_seen = set()
 
-    while keys:
-        key = keys.pop()
-        if key < num_boxes and key not in visited:
-            visited.add(key)
-            keys.update(boxes[key])
+    queue = deque([0])
 
-    return len(visited) == num_boxes
+    while queue:
+        box = queue.popleft()
+        unlocked_boxes.add(box)
+
+        for key in boxes[box]:
+            if not isinstance(key, int):
+                raise ValueError("Keys must be positive integers.")
+
+            keys_seen.add(key)
+
+            if key not in unlocked_boxes and 0 <= key < num_boxes:
+                queue.append(key)
+
+    return len(unlocked_boxes) == num_boxes
