@@ -79,22 +79,16 @@ def canUnlockAll(boxes):
     unlocked_boxes = set()
     keys_seen = set()
 
-    # Initialize with the first box (0)
-    queue = [0]
+    queue = deque([0])
 
     while queue:
-        box = queue.pop(0)
+        box = queue.popleft()
         unlocked_boxes.add(box)
 
-        # Check keys in the current box
         for key in boxes[box]:
             keys_seen.add(key)
 
-            # If the key opens a new box and that box is not unlocked yet
-            # add it to the queue
             if key not in unlocked_boxes and key < num_boxes:
                 queue.append(key)
 
-    # If all boxes can be unlocked (i.e., the set of unlocked_boxes contains
-    # all boxes)
     return len(unlocked_boxes) == num_boxes
