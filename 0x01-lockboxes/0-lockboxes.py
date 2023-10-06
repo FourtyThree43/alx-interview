@@ -29,7 +29,7 @@ def canUnlockAll(boxes: List[List[int]]) -> bool:
         for key in boxes[box]:
             keys_seen.add(key)
 
-            if key not in unlocked_boxes and key < num_boxes:
+            if key not in unlocked_boxes and key != box and key < num_boxes:
                 queue.append(key)
 
     return len(unlocked_boxes) == num_boxes
