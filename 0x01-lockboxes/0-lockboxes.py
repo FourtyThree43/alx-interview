@@ -17,19 +17,16 @@ def canUnlockAll(boxes: List[List[int]]) -> bool:
         bool: True if all boxes can be opened, False otherwise.
     """
     num_boxes = len(boxes)
-    unlocked_boxes = set()
-    keys_seen = set()
+    unlocked_boxes = set([0])
 
     queue = deque([0])
 
     while queue:
         box = queue.popleft()
-        unlocked_boxes.add(box)
 
         for key in boxes[box]:
-            keys_seen.add(key)
-
             if key not in unlocked_boxes and key < num_boxes:
+                unlocked_boxes.add(key)
                 queue.append(key)
 
     return len(unlocked_boxes) == num_boxes
