@@ -16,6 +16,8 @@ def minOperations(n: int) -> int:
         if n % i == 0:
             return minOperations(n // i) + i
 
+    return 0
+
 
 def minOperations_v1(n: int) -> int:
     """
