@@ -1,9 +1,9 @@
 #!/usr/bin/python3
-import sys
-import re
-import time
 from collections import defaultdict
 from typing import Tuple, List, Dict
+import re
+import sys
+import time
 
 STATUS_CODES = (200, 301, 400, 401, 403, 404, 405, 500)
 
@@ -35,7 +35,7 @@ def parse_log_line(line: str) -> Tuple[int, int] | Tuple[None, None]:
         Tuple[int, int]: The status code and file size.
         If no match is found, returns None for both.
     """
-    log_pattern = r'(\d+\.\d+\.\d+\.\d+) - \[([^\]]+)\] "GET /projects/260 HTTP/1\.1" (\d+) (\d+)'
+    log_pattern = r'(\d+\.\d+\.\d+\.\d+) - \[([^\]]+)\] "GET .*" (\d+) (\d+)'
     match = re.match(log_pattern, line.strip())
     if match:
         _, _, status_code, size = match.groups()
