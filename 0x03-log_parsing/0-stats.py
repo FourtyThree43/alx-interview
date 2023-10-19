@@ -51,7 +51,7 @@ def process_log_lines() -> None:
     """
     line_count = 0
     file_sizes = []
-    status_codes = defaultdict(int)
+    status_codes = defaultdict(int)  # type: ignore[var-annotated]
 
     try:
         for line in sys.stdin:
