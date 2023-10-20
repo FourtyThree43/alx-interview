@@ -9,23 +9,17 @@
     - Returns the fewest number of operations needed to reach `n`.
 *)
 let rec min_operations n =
-  if n <= 1 then
-    0
+  if n <= 1 then 0
   else
     let rec find_divisor d =
-      if n mod d = 0 then
-        min_operations (n / d) + d
-      else
-        find_divisor (d + 1)
+      if n mod d = 0 then min_operations (n / d) + d else find_divisor (d + 1)
     in
     find_divisor 2
-;;
 
 (** Main function *)
 let main () =
   let n = 9 in
   let result = min_operations n in
   Printf.printf "Minimum # operations to get %d 'H' characters: %d\n" n result
-;;
 
 let () = main ()

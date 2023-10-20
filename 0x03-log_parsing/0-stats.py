@@ -52,7 +52,7 @@ def process_log_lines() -> None:
     """
     line_count = 0
     file_sizes = []
-    status_codes = defaultdict(int)  # type: ignore[var-annotated]
+    status_codes: Dict[int, int] = defaultdict(int)
 
     try:
         for line in sys.stdin:
