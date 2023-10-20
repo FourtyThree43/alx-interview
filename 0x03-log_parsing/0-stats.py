@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""Module for log parsing script."""
 from collections import defaultdict
 from typing import Tuple, List, Dict
 import re
