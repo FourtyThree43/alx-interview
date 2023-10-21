@@ -2,6 +2,9 @@
 """A script for parsing HTTP request logs.
 """
 import re
+import sys
+import time
+from collections import defaultdict
 
 
 def main():
