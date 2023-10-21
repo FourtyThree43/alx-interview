@@ -3,12 +3,6 @@
 """
 
 
-def parse_logs(log_lines) -> Dic:
-    """Parse log lines into a list of dicts.
-    """
-    pass
-
-
 def main():
     """
     The main function.
