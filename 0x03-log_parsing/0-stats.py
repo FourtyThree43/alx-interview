@@ -16,13 +16,13 @@ def parse_log(log: str) -> Tuple[Optional[str], Optional[str]]:
 
     Returns:
         A tuple containing the status code and file size.
-        If the log entry does not match the expected format, returns(None, None)
+        If the log entry does not match the expected format, returns None, None
     """
     parts = (
         r"\s*(?P<ip>\S+)\s*",
         r"- \[",
         r"(?P<date>[^\]]+)",
-        r'\] "(?P<method>GET) (?P<resource>/projects/260) (?P<protocol>HTTP/1\.1)" ',
+        r'\] "(?P<method>GET) (?P<res>/projects/260) (?P<proto>HTTP/1\.1)" ',
         r"(?P<status_code>\d+)",
         r" ",
         r"(?P<file_size>\d+)",
