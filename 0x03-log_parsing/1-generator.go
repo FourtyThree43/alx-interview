@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 10000; i++ {
 		time.Sleep(time.Duration(rand.Float64()) * time.Second)
 		fmt.Printf("%d.%d.%d.%d - [%s] \"GET /projects/260 HTTP/1.1\" %d %d\n",
 			rand.Intn(255)+1, rand.Intn(255)+1, rand.Intn(255)+1, rand.Intn(255)+1,

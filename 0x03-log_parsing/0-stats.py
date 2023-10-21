@@ -1,68 +1,86 @@
 #!/usr/bin/python3
-"""A script for parsing HTTP request logs.
-"""
+"""Module for parsing logs."""
+
 import re
 import sys
-import time
-from collections import defaultdict
-from typing import Tuple, List, Dict
-
-STATUS_CODES = (200, 301, 400, 401, 403, 404, 405, 500)
+from collections import Counter
+from typing import Tuple, Optional
 
 
-def main():
+def parse_log(log: str) -> Tuple[Optional[str], Optional[str]]:
     """
-    The main function.
+    Parse a log entry, extracting the status code and file size.
+
+    Args:
+        log (str): A string representing a single log entry.
+
+    Returns:
+        A tuple containing the status code and file size.
+        If the log entry does not match the expected format, returns(None, None)
     """
+    parts = (
+        r"\s*(?P<ip>\S+)\s*",
+        r"- \[",
+        r"(?P<date>[^\]]+)",
+        r'\] "(?P<method>GET) (?P<resource>/projects/260) (?P<protocol>HTTP/1\.1)" ',
+        r"(?P<status_code>\d+)",
+        r" ",
+        r"(?P<file_size>\d+)",
+    )
 
-    def print_statistics(file_sizes: List[int],
-                         status_codes: Dict[int, int]) -> None:
-        """ Prints statistics about the log lines processed so far.
-        """
-        total_size = sum(file_sizes)
-        print(f"File size: {total_size}")
-        for status_code in sorted(status_codes.keys()):
-            print(f"{status_code}: {status_codes[status_code]}")
+    log_fmt = "{}{}{}{}{}{}{}\\s*".format(parts[0], parts[1], parts[2],
+                                          parts[3], parts[4], parts[5],
+                                          parts[6])
 
-    def parse_log_line(line: str) -> Tuple[int, int] | Tuple[None, None]:
-        """ Parses a log line and returns the status code and file size.
-        """
-        log_pattern = r'(\d+\.\d+\.\d+\.\d+) - \[([^\]]+)\] "GET .*" (\d+) (\d+)'
-        match = re.match(log_pattern, line.strip())
-        if match:
-            _, _, status_code, size = match.groups()
-            return int(status_code), int(size)
+    match = re.fullmatch(log_fmt, log.strip())
+    if match:
+        status = match.group("status_code")
+        size = match.group("file_size")
+        if status in {"200", "301", "400", "401", "403", "404", "405", "500"}:
+            return status, size
+    return None, None
 
-        return None, None
 
-    def process_log_lines() -> None:
-        """ Processes log lines from stdin.
-        """
-        line_count = 0
-        file_sizes = []
-        status_codes: Dict[int, int] = defaultdict(int)
+def process_logs() -> None:
+    """
+    Process logs from standard input.
 
-        try:
-            for line in sys.stdin:
-                status_code, file_size = parse_log_line(line)
-                if status_code and file_size:
-                    file_sizes.append(file_size)
+    Reads logs line by line, parses each log to extract the status code and
+    file size, and keeps a running total of the file size and a count
+    of each status code.
 
-                    if status_code in STATUS_CODES:
-                        status_codes[status_code] += 1
+    Prints the statistics every 10 lines and when
+    an EOFError or KeyboardInterrupt exception is raised.
+    """
+    status_counter, size_counter = Counter(), Counter()
+    try:
+        for idx, log in enumerate(sys.stdin, start=1):
+            status, size = parse_log(log)
+            if status and size:
+                status_counter[status] += 1
+                size_counter["size"] += int(size)
+            if idx % 10 == 0:
+                print_stats(status_counter, size_counter)
+    except (KeyboardInterrupt, EOFError):
+        print_stats(status_counter, size_counter)
+        sys.exit(0)
 
-                    line_count += 1
 
-                    if line_count % 10 == 0:
-                        print_statistics(file_sizes, status_codes)
-        except KeyboardInterrupt:
-            pass
-        finally:
-            print_statistics(file_sizes, status_codes)
-            time.sleep(5)
+def print_stats(status_counter: Counter, size_counter: Counter) -> None:
+    """
+    Print statistics about the processed logs.
 
-    process_log_lines()
+    Args:
+        status_counter (Counter): A counter of HTTP status codes.
+        size_counter (Counter): A counter of file sizes.
+
+    Prints the total file size and the count of each status code
+    in ascending order.
+    """
+    print(f"\nFile size: {size_counter['size']}")
+    for status in sorted(status_counter):
+        print(f"{status}: {status_counter[status]}")
 
 
 if __name__ == "__main__":
-    main()
+    process_logs()
