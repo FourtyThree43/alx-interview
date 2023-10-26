@@ -15,7 +15,7 @@ def validUTF8(data: List[int]) -> bool:
     try:
         bytes(data).decode('utf-8')
         return True
-    except (OverflowError, TypeError, UnicodeDecodeError, ValueError):
+    except Exception:
         return False
 
 
