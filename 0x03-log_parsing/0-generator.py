@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""Script that generates fake logs for testing"""
 import random
 import sys
 from time import sleep
