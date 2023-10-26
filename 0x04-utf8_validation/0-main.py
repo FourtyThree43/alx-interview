@@ -30,3 +30,6 @@ print(f"Valid UTF-8: {validUTF8(data)} \tDecoded UTF-8: [{decodeUTF8(data)}]")
 # Test case for empty input data
 data = []
 print(f"Valid UTF-8: {validUTF8(data)} \tDecoded UTF-8: [{decodeUTF8(data)}]")
+
+data = [-260]
+print(f"Valid UTF-8: {validUTF8(data)} \tDecoded UTF-8: [{decodeUTF8(data)}]")
