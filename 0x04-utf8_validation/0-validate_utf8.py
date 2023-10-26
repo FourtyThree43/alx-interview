@@ -1,5 +1,6 @@
-#!/usr/bin/env python3
-""" UTF-8 Validation """
+#!/usr/bin/python3
+""" UTF-8 Validation
+"""
 from typing import List, Optional
 
 
