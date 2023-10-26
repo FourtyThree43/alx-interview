@@ -10,10 +10,14 @@ def validUTF8(data: List[int]) -> bool:
     """
     if not all(isinstance(i, int) for i in data):
         return False
-    if not all(i >= 0 for i in data):
+    if not all(0 <= i < 256 for i in data):
         return False
     try:
-        bytes(data).decode('utf-8')
+        decoded = bytes(data).decode('utf-8')
+        # Check that the data is specifically UTF-8 and not just any decodable
+        # str by encoding it back to bytes and comparing with the original data
+        if list(decoded.encode('utf-8')) != data:
+            return False
         return True
     except (OverflowError, TypeError, UnicodeDecodeError, ValueError):
         return False
