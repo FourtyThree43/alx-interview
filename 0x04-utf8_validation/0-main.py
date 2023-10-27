@@ -3,7 +3,7 @@
 Main file for testing
 """
 
-validUTF8 = __import__('0-validate_utf8').validUTF8
+validUTF8 = __import__('1-validate_utf8').validUTF8
 decodeUTF8 = __import__('0-validate_utf8').decodedUTF8
 
 # Test case for valid UTF-8 encoding
