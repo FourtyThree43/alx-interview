@@ -4,10 +4,41 @@
 import sys
 
 
-def nqueens(n: int):
-    """ solve N Queen problem
+def solveNQueens(n: int):
     """
-    pass
+    Finds all valid arrangements of `n` queens on an `n x n` chessboard.
+
+    Args:
+        n (int): The number of queens to be placed on the chessboard.
+
+    Returns:
+        list: A list of all valid queen arrangements. Each arrangement
+        is represented as a list of column indices for each row.
+
+    """
+
+    def DFS(queens, xy_dif, xy_sum):
+        """
+        Performs a depth-first search to find all valid queen arrangements.
+
+        Args:
+         queens (list): The column indices of the already placed queens.
+         xy_dif (list): Negative diagonal indices (row - col) for placed queens
+         xy_sum (list): Positive diagonal indices (row + col) for placed queens
+        """
+        r = len(queens)
+        if r == n:
+            solutions.append(queens)
+            return None
+
+        for c in range(n):
+            if c not in queens and r - c not in xy_dif and r + c not in xy_sum:
+                DFS(queens + [c], xy_dif + [r - c], xy_sum + [r + c])
+
+    solutions = []
+    DFS([], [], [])
+
+    return solutions
 
 
 def main():
@@ -25,7 +56,8 @@ def main():
         print("N must be at least 4")
         sys.exit(1)
 
-    nqueens(N)
+    for solution in solveNQueens(N):
+        print([[i, j] for i, j in enumerate(solution)])
 
 
 if __name__ == "__main__":
