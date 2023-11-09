@@ -9,7 +9,7 @@ function fetch (url) {
       } else if (response.statusCode === 200) {
         resolve(body);
       } else {
-        reject(`Error code: ${response.statusCode}`);
+        reject(new Error(`Request failed. Status code: ${response.statusCode}`));
       }
     });
   });
