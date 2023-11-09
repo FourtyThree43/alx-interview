@@ -7,7 +7,7 @@ function fetch(url) {
 			if (err) {
 				reject(err);
 			} else if (response.statusCode === 200) {
-				resolve(JSON.parse(body));
+				resolve(body);
 			} else {
 				reject(`Error code: ${response.statusCode}`);
 			}
@@ -15,29 +15,33 @@ function fetch(url) {
 	});
 }
 
-async function fetchMovieCharacters(movieID) {
-	try {
-		const movieData = await fetch(`https://swapi-api.hbtn.io/api/films/${movieID}/`);
-		fetchCharactersRecursively(movieData.characters, 0);
-	} catch (err) {
-		console.error(err);
-	}
+function fetchMovieCharacters(movieID) {
+	const apiUrl = `https://swapi-api.hbtn.io/api/films/${movieID}/`;
+
+	fetch(apiUrl).then(body => {
+		const movieData = JSON.parse(body);
+		const charData = movieData.characters;
+		fetchCharactersRecursively(charData, 0);
+	}).catch(err => console.error(err));
 }
 
-async function fetchCharactersRecursively(charList, index) {
-	if (index >= charList.length) {
+function fetchCharactersRecursively(charData, index) {
+	if (index >= charData.length) {
 		return;
 	}
 
-	try {
-		const character = await fetch(charList[index]);
+	const characterUrl = charData[index];
+
+	fetch(characterUrl).then(body => {
+		const character = JSON.parse(body);
 		console.log(character.name);
-		fetchCharactersRecursively(charList, index + 1);
-	} catch (err) {
+		fetchCharactersRecursively(charData, index + 1);
+	}).catch(err => {
 		console.error(err);
-		fetchCharactersRecursively(charList, index + 1); // Fetch the next character even if there's an error
-	}
+		fetchCharactersRecursively(charData, index + 1);
+	});
 }
+
 
 const movieID = process.argv[2];
 if (!movieID) {
