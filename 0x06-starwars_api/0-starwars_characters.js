@@ -43,8 +43,4 @@ function fetchMovieCharacters (movieID) {
 }
 
 const movieID = process.argv[2];
-if (!movieID) {
-  console.log('./0-starwars_characters.js <movie_ID>');
-} else {
-  fetchMovieCharacters(movieID);
-}
+fetchMovieCharacters(movieID);
