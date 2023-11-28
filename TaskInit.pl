@@ -105,6 +105,7 @@ sub get_author_name {
     my $log_output = `git -C "$current_dir" log --format='%aN'`;
     my @author_names = split /\n/, $log_output;
     my $author_name = $author_names[0] || "Unknown-Author";
+    $author_name =~ s/^'(.*)'$/$1/;  # Remove single quotes
     chomp($author_name);
     return $author_name;
 }

@@ -1,7 +1,7 @@
 import net.http
 import json
 import os
-// import sync.pool
+import sync
 
 struct MovieInfo {
 	characters []string
@@ -19,16 +19,15 @@ fn fetch_data(url string) string {
 	return resp.body
 }
 
-// fn worker_fetch(mut p pool.PoolProcessor, cursor int, worker_id int) Character {
-//     url := p.get_item[string](cursor)
-//     data := fetch_data(url)
-//     character := json.decode(Character, data) or {
-//         eprintln('JSON Decode error: $[err]')
-//         exit(1)
-//     }
-//     return character
-// }
-
+fn fetch_character_data(url string, mut wg sync.WaitGroup) {
+	data := fetch_data(url)
+	character := json.decode(Character, data) or {
+		eprintln('JSON Decode error: $[err]')
+		exit(1)
+	}
+	println(character.name)
+	wg.done()
+}
 
 fn main() {
 	id := os.args[1] or {
@@ -43,19 +42,12 @@ fn main() {
 		exit(1)
 	}
 
+	mut wg := sync.new_waitgroup()
+	wg.add(movie.characters.len)
+
 	for char_url in movie.characters {
-		character_info := fetch_data(char_url)
-		character := json.decode(Character, character_info) or {
-			eprintln('JSON Decode error: $[err]')
-			exit(1)
-		}
-		println(character.name)
+		spawn fetch_character_data(char_url, mut wg)
 	}
 
-	// mut fetcher_pool := pool.new_pool_processor(
-	// 	callback: worker_fetch
-	// )
-	// fetcher_pool.work_on_items(movie.characters)
-
-	// println(characters)
+	wg.wait()
 }
